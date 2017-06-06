@@ -123,7 +123,7 @@ class SisLogin extends React.Component{
 				<div> 
 				{this.state.userData==='' ?
 					<Login />:
-					<MasterCont />
+					<h4>Relleno hasta que haga la paginia inicial</h4>
 				}
 				</div>
 			</Col>
