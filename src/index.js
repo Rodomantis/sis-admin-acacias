@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import SisLogin from 'sis-login';
+import SisLogin from './sis-login.react';
 import registerServiceWorker from './registerServiceWorker';
 import './index.css';
 
 ReactDOM.render(
 	//<App />, 
-	<SisLogin>
+	<SisLogin />,
 	document.getElementById('root')
 );
 registerServiceWorker();
