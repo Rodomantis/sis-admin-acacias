@@ -27,7 +27,6 @@ import { Nav, NavItem, handleSelect, DropdownButton, MenuItem, Row, Col, ButtonG
 
 var db = firebase.database();
 var qExpensas = db.ref("expensas");
-var qVec = db.ref("vecinos");
 
 /*var guardarPartes = (c,n,u,cant,ca,m,p) => {
 	var myRef = qPartes.push();
@@ -54,9 +53,8 @@ class RegistrosEdificio extends React.Component{
 	constructor(props) {
 		super(props);
 		this.state = {
-			mostrarModalExp:false, mostrarModalVec: false,
-			CiVec:'',nombreVec:'',apellidoVec:'',telefonoVec:'',
-			arrayExp: [], arrayVec:[],
+			mostrarModalExp:false, 
+			arrayExp: [],
 			codigoExp:'', nombreExp:'', empresaExp:'',
 		};
 	}
@@ -65,11 +63,8 @@ class RegistrosEdificio extends React.Component{
 		qExpensas.on("value",(snapshot) => {
 			this.setState({ arrayExp: snapshot.val() });
 		},this );
-		qVec.on("value",(snapshot) => {
-			this.setState({ arrayVec: snapshot.val() });
-		},this );
 	}
-	registrarExpensas =()=>{
+	registrar =()=>{
 		funciones.guardarExp(
 			this.state.nombreExp,
 			this.state.codigoExp,
@@ -77,26 +72,11 @@ class RegistrosEdificio extends React.Component{
 		);
 		this.cerrarModalExp();
 	}
-	registrarVecinos=()=>{
-		funciones.guardarVecino(
-			this.state.CiVec,
-			this.state.nombreVec,
-			this.state.apellidoVec,
-			this.state.telefonoVec
-		);
-		this.cerrarModalVec();
-	}
 	abrirModalExp=()=>{this.setState({ mostrarModalExp: true });}
 	cerrarModalExp=()=>{this.setState({ mostrarModalExp: false });}
-	abrirModalVec=()=>{this.setState({ mostrarModalVec: true });}
-	cerrarModalVec=()=>{this.setState({ mostrarModalVec: false });}
 	handleGuardarCodigo=(e)=> { this.setState({ codigoExp: e.target.value, });}
 	handleGuardarNombre=(e)=> { this.setState({ nombreExp: e.target.value, });}
 	handleGuardarEmpresa=(e)=> { this.setState({ empresaExp: e.target.value,});}
-	handleGuardarNombreVec=(e)=> {this.setState({ nombreVec: e.target.value, });}
-	handleGuardarApellidoVec=(e)=> {this.setState({ apellidoVec: e.target.value, });}
-	handleGuardarTelefonoVec=(e)=> {this.setState({ telefonoVec: e.target.value, });}
-	handleGuardarCiVec=(e)=> {this.setState({ CiVec: e.target.value, });}
 	render() {
 		return (
 		<div className="RegistrosEdificio">
@@ -104,7 +84,6 @@ class RegistrosEdificio extends React.Component{
 				<Col xs={36} sm={18} md={12}>
 					<ButtonGroup>
 							<Button bsSize="large" bsStyle="primary" onClick={this.abrirModalExp}>Registrar Nuevas Expensas</Button>
-							<Button bsSize="large" bsStyle="danger" onClick={this.abrirModalVec}>Registrar Nuevos Vecinos</Button>
 					</ButtonGroup>
 				</Col>
 			</Row>
@@ -121,58 +100,16 @@ class RegistrosEdificio extends React.Component{
 					<Label>Nombre Empresa a pagar: </Label>
 					<FormControl type="text" onChange={this.handleGuardarEmpresa} value={this.state.empresaExp} placeholder="Empresa" />
 					<Label>Seleccionar Unidad:</Label>
-					<Table responsive style={{"height":"200px"}}>
-						<thead>
-							<tr>
-								<th>Codigo</th>
-								<th>Nombre</th>
-								<th>Empresa</th>
-								<th>Fecha</th>
-								</tr>
-						</thead>
-						<tbody>
-							{_.map(this.state.arrayExp,(value) => 
-								<tr>
-									<td>{value.codigoExpensa}</td>
-									<td>{value.nombreExpensa}</td>
-									<td>{value.empresaProv}</td>
-									<td>{value.fechaRegistro}</td>
-								</tr>
-							)}
-						</tbody>
-					</Table>
+					<FormControl componentClass="select" multiple style={{"height":"200px"}}>
+						{_.map(this.state.arrayExp,(value) => 
+							<option>{value.codigoExpensa} {value.nombreExpensa} {value.empresaProv} </option>
+						)}
+					</FormControl>
 				</div>
 				</Modal.Body>
 				<Modal.Footer>
-					<Button bsSize="large" bsStyle="primary" onClick={this.registrarExpensas}> Registrar</Button>
+					<Button bsSize="large" bsStyle="primary" onClick={this.registrar}> Registrar</Button>
 					<Button bsSize="large" bsStyle="danger" onClick={this.cerrarModalExp}>Cerrar</Button>
-				</Modal.Footer>
-			</Modal>
-			<Modal show={this.state.mostrarModalVec} onHide={this.cerrarModalVec}>
-				<Modal.Header closeButton>
-					<Modal.Title>Registro de vecinos</Modal.Title>
-				</Modal.Header>
-				<Modal.Body>
-					<Label bsStyle="primary">Nombre</Label>
-					<FormControl type="text" onChange={this.handleGuardarNombreVec} value={this.state.nombreVec} placeholder="Nombre vecino" />
-					<Label bsStyle="primary">Apellido</Label>
-					<FormControl type="text" onChange={this.handleGuardarApellidoVec} value={this.state.apellidoVec} placeholder="Apellido vecino" />
-					<Label bsStyle="primary">Telefono</Label>
-					<FormControl type="text" onChange={this.handleGuardarTelefonoVec} value={this.state.telefonoVec} placeholder="Telefono vecino" />
-					<Label bsStyle="primary">Carnet ID</Label>
-					<FormControl type="text" onChange={this.handleGuardarCiVec} value={this.state.CiVec} placeholder="CI ID vecino" />
-					<Label bsStyle="primary">Lista de vecinos</Label>
-					<FormControl componentClass="select" multiple style={{"height":"100px"}}>
-						{
-							_.map(this.state.arrayVec, (val)=>
-								<option>{val.idCi} {val.nombre} {val.apellido}</option>
-							)
-						}
-					</FormControl>
-				</Modal.Body>
-				<Modal.Footer>
-					<Button bsStyle="success" onClick={this.registrarVecinos}>Guardar Cliente</Button>
-					<Button bsStyle="danger" onClick={this.cerrarModalVec}>Cerrar</Button>
 				</Modal.Footer>
 			</Modal>
 		</div>

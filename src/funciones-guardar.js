@@ -1,73 +1,25 @@
 import firebase from './conexion'
 
 var db = firebase.database();
-var qPartes = db.ref("partes");
-var qUnidades = db.ref("unidades");
-var qCategorias = db.ref("categorias");
-var qMarcas = db.ref("marcas");
-var qMatriz = db.ref("datosMatriz");
-var qSucursales = db.ref("datosSucursales");
-var qFactura = db.ref("cotizaciones");
 var qUsers = db.ref("usuarios");
+var qFact = db.ref("pagoExpensas");
+var qExp = db.ref("expensas");
+var qVec = db.ref("vecinos");
 
 var funciones = {
-	guardarUnidades(u){
-		var myRef = qUnidades.push();
+	guardarVecino(ciId,nom,ap,tel){
+		var myRef =qVec.child(ciId)
 		var key = myRef.key;
-		myRef.set({nomUnidad: u});
-	},
-	guardarPartes(c,n,u,cant,ca,m,p){
-		var myRef = qPartes.push();
-		var key = myRef.key;
-		var newData={
-			id: key,
-			codigoParte: c,
-			nombre: n,
-			unidad : u,
-			cantidadTotal: cant,
-			categoria : ca,
-			marca: m,
-			precioUnBs: p,
-		}
-		myRef.set(newData);
-	},
-	guardarCategorias(c){
-		var myRef = qCategorias.push();
-		var key = myRef.key;
-		myRef.set({nombreCat: c});
-	},
-	guardarMarcas(m){
-		var myRef = qMarcas.push();
-		var key = myRef.key;
-		myRef.set({nombreMar: m});
-	},
-	guardarDatosMatriz(n,d,t,e,r,doc,num,a){
-		var myRef = qMatriz.push();
-		var key = myRef.key;
-		myRef.set({
-			nombreEmpresa: n,
-			direccionMatriz: d,
-			telefonoMatriz: t,
-			eMailEmpresa: e,
-			responsableEmpresa: r,
-			tipoDocumento: doc,
-			numDocumento: num,
-			actEconomica: a,
-		});
-	},
-	guardarDatosSucursal(d,t,r,doc,num){
-		var myRef = qMatriz.push();
-		var key = myRef.key;
-		myRef.set({
-			direccionSucursal: d,
-			telefonoSucursal: t,
-			responsableSucursal: r,
-			tipoDocumentoS: doc,
-			numDocumentoS: num,
-		});
+		var datosVecino = {
+			nombre: nom,
+			idCi: ciId,
+			apellido: ap,
+			telefono: tel,
+		};
+		myRef.set(datosVecino);
 	},
 	guardarFact(nom, ap, tel, fact, total){
-		var myRef = qFactura.push();
+		var myRef = qFact.push();
 		var key = myRef.key;
 		var datosFactura = {
 			nombre: nom,
@@ -78,11 +30,23 @@ var funciones = {
 		};
 		myRef.set(datosFactura);
 	},
-	guardarDatosUsuario(datosUsuario, correo, uid){
+	guardarExp(nom,cod,empresa){
+		var fecha = new Date().toJSON().slice(0,10).replace(/-/g,'/');
+		var myRef = qExp.child(cod);
+		var key = myRef.key;
+		var datosExp = {
+			nombreExpensa: nom,
+			codigoExpensa: cod,
+			fechaRegistro: fecha,
+			empresaProv: empresa,
+		};
+		myRef.set(datosExp);
+	},
+	guardarDatosUsuario(nomUsuario, correo, uid){
 		var myRef = qUsers.child(uid);
 		var key = myRef.key;
 		var datosUsers = {
-			datosUsuarios: datosUsuario,
+			nombreUsuario: nomUsuario,
 			correoUsuario: correo,
 			nivel: 1,
 		};

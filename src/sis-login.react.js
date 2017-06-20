@@ -2,10 +2,8 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import firebase from './conexion';
+import RegistrosEdificio from './registrar-expensas.react';
 import funciones from './funciones-guardar';
-import MasterCont from './master.react';
-import RegCotizacion from './reg-cot.react';
-import RegDatEmp from './datos-empresa.react';
 import { ControlLabel, Button, Form, Label, FormControl, FormGroup, Password, Modal, Popover, Tooltip, Select } from 'react-bootstrap';
 import { Nav, NavItem, handleSelect, DropdownButton, MenuItem, Row, Col, ButtonGroup, Table } from 'react-bootstrap';
 import Estilos from './estilos-react';
@@ -105,6 +103,7 @@ class SisLogin extends React.Component{
 			var credential = error.credential;
 			console.log(errorCode);
 			console.log(errorMessage);
+			alert(errorMessage);
 		});
 	}
 	render() {
@@ -123,7 +122,7 @@ class SisLogin extends React.Component{
 				<div> 
 				{this.state.userData==='' ?
 					<Login />:
-					<h4>Relleno hasta que haga la paginia inicial</h4>
+					<RegistrosEdificio />
 				}
 				</div>
 			</Col>
@@ -132,7 +131,7 @@ class SisLogin extends React.Component{
   }
 }
 
-class Login extends SisVentas{
+class Login extends SisLogin{
 	constructor(){
 		super()
 		//call super to run parent's constructor
@@ -160,4 +159,4 @@ class Login extends SisVentas{
 	}
 }
 
-export default SisVentas;
+export default SisLogin;
