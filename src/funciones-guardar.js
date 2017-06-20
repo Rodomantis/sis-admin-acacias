@@ -3,6 +3,7 @@ import firebase from './conexion'
 var db = firebase.database();
 var qUsers = db.ref("usuarios");
 var qFact = db.ref("pagoExpensas");
+<<<<<<< HEAD
 var qExp = db.ref("expensas");
 var qVec = db.ref("vecinos");
 
@@ -18,6 +19,10 @@ var funciones = {
 		};
 		myRef.set(datosVecino);
 	},
+=======
+
+var funciones = {
+>>>>>>> 0d30b84522b33748b03f6fbd01cc5d63e6c179f4
 	guardarFact(nom, ap, tel, fact, total){
 		var myRef = qFact.push();
 		var key = myRef.key;
@@ -30,6 +35,7 @@ var funciones = {
 		};
 		myRef.set(datosFactura);
 	},
+<<<<<<< HEAD
 	guardarExp(nom,cod,empresa){
 		var fecha = new Date().toJSON().slice(0,10).replace(/-/g,'/');
 		var myRef = qExp.child(cod);
@@ -42,6 +48,8 @@ var funciones = {
 		};
 		myRef.set(datosExp);
 	},
+=======
+>>>>>>> 0d30b84522b33748b03f6fbd01cc5d63e6c179f4
 	guardarDatosUsuario(nomUsuario, correo, uid){
 		var myRef = qUsers.child(uid);
 		var key = myRef.key;
